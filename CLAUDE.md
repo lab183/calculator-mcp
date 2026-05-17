@@ -3,13 +3,22 @@
 ## Build & run
 
 ```bash
-go build ./...          # compile
-go build -o calculator-mcp . && ./calculator-mcp  # run (stdio transport)
+make build   # compile → ./calculator-mcp
+make run     # build + run (stdio transport)
+make         # list all available targets
+```
+
+Raw Go commands also work:
+
+```bash
+go build -o calculator-mcp .
+./calculator-mcp
 ```
 
 ## Project structure
 
 - `main.go` — entire server: tool definition + handler + `server.ServeStdio`
+- `Makefile` — build, run, fmt, vet, tidy, help targets
 - `go.mod` / `go.sum` — dependencies (primary: `github.com/mark3labs/mcp-go`)
 
 ## Key conventions

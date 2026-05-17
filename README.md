@@ -34,8 +34,25 @@ Performs basic arithmetic operations.
 Build and run the server (communicates over stdio):
 
 ```bash
+make run
+```
+
+Or without Make:
+
+```bash
 go build -o calculator-mcp .
 ./calculator-mcp
+```
+
+Common Make targets:
+
+```
+make build   # compile the binary
+make run     # build and run
+make fmt     # format source files
+make vet     # run go vet
+make tidy    # tidy go.mod / go.sum
+make         # show all targets
 ```
 
 ### Connect via Claude Desktop
