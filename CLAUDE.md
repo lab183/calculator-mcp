@@ -4,15 +4,17 @@
 
 ```bash
 make build   # compile → ./calculator-mcp
-make run     # build + run (stdio transport)
+make run     # build + run (stdio, default transport)
 make         # list all available targets
 ```
 
-Raw Go commands also work:
+Transport selection via flags:
 
 ```bash
-go build -o calculator-mcp .
-./calculator-mcp
+./calculator-mcp                          # stdio (default)
+./calculator-mcp --transport stdio        # stdio (explicit)
+./calculator-mcp --transport http         # HTTP on :8080
+./calculator-mcp --transport http --addr :9090  # HTTP on custom port
 ```
 
 ## Project structure

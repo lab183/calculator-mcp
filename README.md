@@ -31,24 +31,44 @@ Performs basic arithmetic operations.
 
 ## Usage
 
-Build and run the server (communicates over stdio):
+### Stdio (default)
+
+Used by Claude Desktop and other MCP CLI hosts:
 
 ```bash
 make run
+# or
+./calculator-mcp --transport stdio
 ```
 
-Or without Make:
+### HTTP (Streamable HTTP transport)
+
+Used by browser-based or networked MCP clients:
 
 ```bash
-go build -o calculator-mcp .
-./calculator-mcp
+./calculator-mcp --transport http --addr :8080
 ```
 
-Common Make targets:
+Verify with curl:
+
+```bash
+curl -X POST http://localhost:8080/mcp \
+  -H "Content-Type: application/json" \
+  -d '{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}'
+```
+
+### Flags
+
+| Flag | Default | Description |
+|------|---------|-------------|
+| `--transport` | `stdio` | `stdio` or `http` |
+| `--addr` | `:8080` | Listen address (HTTP transport only) |
+
+### Common Make targets
 
 ```
 make build   # compile the binary
-make run     # build and run
+make run     # build and run (stdio)
 make fmt     # format source files
 make vet     # run go vet
 make tidy    # tidy go.mod / go.sum

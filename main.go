@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"flag"
 	"fmt"
 	"math"
 
@@ -11,7 +12,10 @@ import (
 )
 
 func main() {
-	// Create a new MCP server
+	transport := flag.String("transport", "stdio", "Transport to use: stdio or http")
+	addr := flag.String("addr", ":8080", "Listen address (http transport only)")
+	flag.Parse()
+
 	s := server.NewMCPServer(
 		"Calculator Demo",
 		"1.0.0",
@@ -23,7 +27,7 @@ func main() {
 		mcp.WithDescription("Perform basic arithmetic operations"),
 		mcp.WithString("operation",
 			mcp.Required(),
-			mcp.Description("The operation to perform (add, subtract, multiply, divide)"),
+			mcp.Description("The operation to perform (add, subtract, multiply, divide, power, sqrt)"),
 			mcp.Enum("add", "subtract", "multiply", "divide", "power", "sqrt"),
 		),
 		mcp.WithNumber("x",
@@ -74,8 +78,16 @@ func main() {
 		}
 		return mcp.NewToolResultText(fmt.Sprintf("%.2f", result)), nil
 	})
-	// Start the server
-	if err := server.ServeStdio(s); err != nil {
-		fmt.Printf("Server error: %v\n", err)
+	switch *transport {
+	case "http":
+		httpServer := server.NewStreamableHTTPServer(s, server.WithStateLess(true))
+		fmt.Printf("Listening on %s\n", *addr)
+		if err := httpServer.Start(*addr); err != nil {
+			fmt.Printf("Server error: %v\n", err)
+		}
+	default:
+		if err := server.ServeStdio(s); err != nil {
+			fmt.Printf("Server error: %v\n", err)
+		}
 	}
 }
