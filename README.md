@@ -27,7 +27,8 @@ Performs basic arithmetic operations.
 
 ## Requirements
 
-- Go 1.21+
+- Go 1.25+
+- Docker (optional, for container builds)
 
 ## Usage
 
@@ -64,15 +65,29 @@ curl -X POST http://localhost:8080/mcp \
 | `--transport` | `stdio` | `stdio` or `http` |
 | `--addr` | `:8080` | Listen address (HTTP transport only) |
 
+### Docker
+
+Build and run as a container (serves HTTP on port 8080):
+
+```bash
+make docker-build
+make docker-run
+# or manually:
+docker build -t calculator-mcp .
+docker run --rm -p 8080:8080 calculator-mcp
+```
+
 ### Common Make targets
 
 ```
-make build   # compile the binary
-make run     # build and run (stdio)
-make fmt     # format source files
-make vet     # run go vet
-make tidy    # tidy go.mod / go.sum
-make         # show all targets
+make build         # compile the binary
+make run           # build and run (stdio)
+make docker-build  # build the Docker image
+make docker-run    # run the server in Docker on port 8080
+make fmt           # format source files
+make vet           # run go vet
+make tidy          # tidy go.mod / go.sum
+make               # show all targets
 ```
 
 ### Connect via Claude Desktop

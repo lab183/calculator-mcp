@@ -1,6 +1,7 @@
 BINARY := calculator-mcp
+IMAGE  := calculator-mcp
 
-.PHONY: build run clean fmt vet tidy help
+.PHONY: build run clean fmt vet tidy docker-build docker-run help
 
 build:   ## Compile the binary
 	go build -o $(BINARY) .
@@ -19,6 +20,12 @@ vet:   ## Run go vet
 
 tidy:   ## Tidy go.mod and go.sum
 	go mod tidy
+
+docker-build:   ## Build the Docker image
+	docker build -t $(IMAGE) .
+
+docker-run:   ## Run the server in Docker on port 8080
+	docker run --rm -p 8080:8080 $(IMAGE)
 
 help:   ## Show this help
 	@grep -E '^[a-zA-Z_-]+:.*##' $(MAKEFILE_LIST) | awk 'BEGIN {FS = ":.*##"}; {printf "  %-8s %s\n", $$1, $$2}'
