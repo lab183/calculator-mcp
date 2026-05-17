@@ -1,7 +1,7 @@
 BINARY := calculator-mcp
 IMAGE  := calculator-mcp
 
-.PHONY: build run clean fmt vet tidy docker-build docker-run help
+.PHONY: build run clean fmt vet tidy test docker-build docker-run help
 
 build:   ## Compile the binary
 	go build -o $(BINARY) .
@@ -20,6 +20,9 @@ vet:   ## Run go vet
 
 tidy:   ## Tidy go.mod and go.sum
 	go mod tidy
+
+test:   ## Run tests
+	go test ./...
 
 docker-build:   ## Build the Docker image
 	docker build -t $(IMAGE) .
